@@ -1,0 +1,70 @@
+{
+  "name": "primer proyecto",
+  "nodes": [
+    {
+      "parameters": {
+        "fromEmail": "ivanmartinez.ccol@gmail.com",
+        "toEmail": "=<un correo>",
+        "subject": "Test send mail",
+        "emailFormat": "text",
+        "text": "=<un mensaje>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "bac40b3b-fde1-4a58-938f-a43130872b88",
+      "name": "Send email",
+      "webhookId": "4b118d03-d87f-49cf-a4e6-b7fcd22d5129",
+      "credentials": {
+        "smtp": {
+          "id": "Z0E0mRToQu8y4V4X",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "path": "f49d5711-87c4-4b19-bd11-f7ec0c277792",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1443ea43-5394-49a6-b915-c7aa2759a7d6",
+      "name": "Webhook",
+      "webhookId": "f49d5711-87c4-4b19-bd11-f7ec0c277792"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Send email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "912a9009-1d54-4e8c-9df8-73f49b3f6322",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "87eb47d621bc3b9a70ffd004d9515b1726e88e18e13b8e8c70c73487d96d3d6d"
+  },
+  "id": "Gsboi0WsBivNPwRN",
+  "tags": []
+}
