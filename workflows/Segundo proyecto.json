@@ -1,0 +1,214 @@
+{
+  "name": "Segundo proyecto",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Registro de usuario",
+        "formDescription": "Este un formulario de registro de prueba en n8n",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nombre",
+              "placeholder": "Introduce tu nombre...",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "placeholder": "Introduce tu email...",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Genero",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Hombre"
+                  },
+                  {
+                    "option": "Mujer"
+                  },
+                  {
+                    "option": "Prefiero no decirlo"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Numero",
+              "placeholder": "Introduce tu numero de telefono...",
+              "requiredField": true
+            }
+          ]
+        },
+        "responseMode": "lastNode",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "626d3e2e-1737-4aec-ae6f-6881912fbeba",
+      "name": "On form submission",
+      "webhookId": "8c090857-2015-4df2-b78d-cdd8596178ce"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/14tie10l9dWPztlZg7M33JfpXQiFC3pwqbvHwe5Ax2QA/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "url",
+          "value": "https://docs.google.com/spreadsheets/d/14tie10l9dWPztlZg7M33JfpXQiFC3pwqbvHwe5Ax2QA/edit?gid=0#gid=0",
+          "__regex": "https:\\/\\/docs\\.google\\.com\\/spreadsheets\\/d\\/[0-9a-zA-Z\\-_]+.*\\#gid=([0-9]+)"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Nombre": "={{ $json.Nombre }}",
+            "Email": "={{ $json.Email }}",
+            "Genero": "={{ $json.Genero }}",
+            "Numero": "={{ $json.Numero }}",
+            "Fecha de registro": "={{ $json.submittedAt }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Nombre",
+              "displayName": "Nombre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Genero",
+              "displayName": "Genero",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Numero",
+              "displayName": "Numero",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Fecha de registro",
+              "displayName": "Fecha de registro",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "86ace44c-0258-4b96-b9f0-f5feecd8e252",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "wqg0Q3R1yhxLN5G6",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "Registro Exitoso a n8n",
+        "message": "=<h1>Hola {{ $json.Nombre }}, bienvenido a nuestro servicio</h1>\n<p>Tu registro en nuestro formulario a sido exitoso</p>\n</br>\n<p>Fecha de registro: {{ $json[\"Fecha de registro\"] }}</p>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "bfbc0a05-c4f5-4d2d-b65f-7fb91d5c30d8",
+      "name": "Send a message",
+      "webhookId": "614d939a-bb27-40fd-a454-869458b4e6ed",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "n5So2n47bHm4MFHP",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "722a295a-6b76-4218-863a-287453eebce1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "87eb47d621bc3b9a70ffd004d9515b1726e88e18e13b8e8c70c73487d96d3d6d"
+  },
+  "id": "NJarIoyC0jxKIVVg",
+  "tags": []
+}
