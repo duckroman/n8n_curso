@@ -81,6 +81,36 @@ n8n_curso/
 └── README.md                   # Este archivo
 ```
 
+## 🧩 Workflows del curso
+
+A continuación se describen los proyectos (clases) incluidos en la carpeta `workflows`. El orden refleja la progresión del curso.
+
+1) primer_proyecto (`workflows/primer_proyecto.json`)
+- Objetivo: Enviar un correo al recibir datos por un webhook.
+- Trigger(s): Webhook.
+- Nodos clave: Webhook → Email Send (SMTP).
+- Flujo: Al recibir la petición HTTP, se dispara el envío de un email con asunto y cuerpo predefinidos.
+- Integraciones: SMTP.
+- Notas: Configurar el destinatario y mensaje reales en el nodo Email Send; requiere credenciales SMTP.
+
+2) segunda_implementación (`workflows/segunda_implementación.json`)
+- Objetivo: Enviar un correo usando datos capturados desde un formulario.
+- Trigger(s): Form Trigger.
+- Nodos clave: Form Trigger → Email Send (SMTP).
+- Campos: Nombre, mail, Mensaje.
+- Flujo: Al enviar el formulario, se toma el email y el mensaje para realizar el envío por SMTP.
+- Integraciones: SMTP.
+- Notas: Requiere credenciales SMTP; personalizar asunto/texto según necesidad.
+
+3) Segundo proyecto (`workflows/Segundo proyecto.json`)
+- Objetivo: Registrar usuarios en una hoja de cálculo y confirmar por correo.
+- Trigger(s): Form Trigger (Registro de usuario).
+- Nodos clave: Form Trigger → Google Sheets (append) → Gmail.
+- Campos: Nombre, Email, Género, Número; se registra también la fecha de envío.
+- Flujo: Se inserta una fila en Google Sheets con los datos del formulario y luego se envía un correo HTML de confirmación al usuario.
+- Integraciones: Google Sheets, Gmail.
+- Notas: Requiere credenciales OAuth2 para Google Sheets y Gmail; verificar el ID/URL de la hoja y los mapeos de columnas.
+
 ## ⚙️ Configuración
 
 ### Evolution API
