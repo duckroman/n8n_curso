@@ -11,6 +11,12 @@ El curso se enfoca en enseñar cómo crear automatizaciones poderosas combinando
 
 Cada workflow representa una clase o mini-proyecto desarrollado durante el curso, donde se exploran diferentes casos de uso y técnicas de automatización.
 
+## 👨‍🏫 Información del Curso
+
+- **Instructor**: Iván Martínez
+- **Institución**: CCOL (Centro de Capacitación en Línea)
+- **Modalidad**: Curso práctico de automatización
+
 ## 🏗️ Arquitectura del Proyecto
 
 ### Componentes Principales
@@ -139,4 +145,6 @@ Este proyecto está diseñado para fines educativos. Cada workflow creado durant
 
 ---
 
+**Creado por**: Iván Martínez  
+**Institución**: CCOL  
 **Nota**: Este es un proyecto educativo del curso de n8n. Los workflows y configuraciones están optimizados para aprendizaje y experimentación.
