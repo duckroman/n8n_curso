@@ -111,6 +111,30 @@ A continuación se describen los proyectos (clases) incluidos en la carpeta `wor
 - Integraciones: Google Sheets, Gmail.
 - Notas: Requiere credenciales OAuth2 para Google Sheets y Gmail; verificar el ID/URL de la hoja y los mapeos de columnas.
 
+4) Proyecto 3 (`workflows/Proyecto 3.json`)
+- Objetivo: Reenviar un mensaje de texto vía Evolution API al número recibido en el webhook.
+- Trigger(s): Webhook (POST /n8n).
+- Nodos clave: Webhook → HTTP Request → Respond to Webhook.
+- Flujo: Extrae body.data.key.remoteJid del webhook y realiza un POST a /message/sendText/{instancia} con el texto “Hola desde n8n con evolution api”, luego responde 200.
+- Integraciones: Evolution API (HTTP).
+- Notas: Configurar la credencial httpHeaderAuth y la URL (túnel/host) vigente.
+
+5) Proyecto 4 (`workflows/Proyecto 4.json`)
+- Objetivo: Asistente de IA con interfaz de chat en n8n para responder FAQ con un tono profesional.
+- Trigger(s): Chat Trigger.
+- Nodos clave: Chat Trigger → AI Agent (Google Gemini + memoria simple).
+- Flujo: Recibe el mensaje en el chat, aplica un system prompt de FAQ y responde usando el modelo Gemini con memoria de ventana.
+- Integraciones: LangChain, Google Gemini.
+- Notas: Requiere credenciales de Google Gemini (PaLM) configuradas.
+
+6) Proyecto 4 pro (`workflows/Proyecto 4 pro.json`)
+- Objetivo: Bot de WhatsApp con IA y memoria por usuario, integrado con Evolution API para enviar la respuesta.
+- Trigger(s): Webhook (POST /n8n).
+- Nodos clave: Webhook → Set (extraer remoteJid/pushName/mensaje) → AI Agent (Gemini + memoria con sessionKey=remoteJid) → Set → HTTP Request → Respond to Webhook.
+- Flujo: Lee el texto y nombre del usuario del payload, genera la respuesta con IA, serializa la salida y la envía a /message/sendText/{instancia}, luego devuelve 200.
+- Integraciones: Evolution API (HTTP), LangChain, Google Gemini.
+- Notas: Mantener la sessionKey con el remoteJid para continuidad de conversación; actualizar URL del endpoint y credencial httpHeaderAuth.
+
 ## ⚙️ Configuración
 
 ### Evolution API
