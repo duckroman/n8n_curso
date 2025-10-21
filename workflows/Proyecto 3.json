@@ -1,0 +1,104 @@
+{
+  "name": "Proyecto 3",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "n8n",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6cbf0f12-c39d-4118-8655-be3276140b46",
+      "name": "Webhook",
+      "webhookId": "59d57e88-a1f8-4c9e-b59b-3adbf0cc4959"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://due-carl-arbitration-moms.trycloudflare.com/message/sendText/ivanTest",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "=json",
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "jsonBody": "={\n  \"number\": \"{{ $json.body.data.key.remoteJid }}\",\n  \"text\": \"Hola desde n8n con evolution api\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "d07c6f2a-2977-4c11-8eeb-5153c33137e6",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "auD07dsVh5531i2h",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "noData",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "1a49b3c9-5c9c-4a4f-b2c6-122f7b717e48",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "be27a6de-1315-4759-bc75-f7f5641da11f",
+  "meta": {
+    "instanceId": "87eb47d621bc3b9a70ffd004d9515b1726e88e18e13b8e8c70c73487d96d3d6d"
+  },
+  "id": "1IVQtiAoPJURvZRh",
+  "tags": []
+}
