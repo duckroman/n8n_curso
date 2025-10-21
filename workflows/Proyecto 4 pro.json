@@ -1,0 +1,268 @@
+{
+  "name": "Proyecto 4 pro",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "n8n",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "10607c96-3ecd-4aa2-9cc9-17c7b7e09598",
+      "name": "Webhook",
+      "webhookId": "4273deb7-135d-440a-865c-acec7a95fced"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bdbe3501-ed1a-4a26-9fba-b46c2129ffcd",
+              "name": "body.data.key.remoteJid",
+              "value": "={{ $json.body.data.key.remoteJid }}",
+              "type": "string"
+            },
+            {
+              "id": "09ca9000-75c8-47c0-8552-73da362a3612",
+              "name": "body.data.pushName",
+              "value": "={{ $json.body.data.pushName }}",
+              "type": "string"
+            },
+            {
+              "id": "5c8c3356-2da8-41f5-bff2-f1871cce1698",
+              "name": "body.data.message.conversation",
+              "value": "={{ $json.body.data.message.conversation }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "5a81410a-021e-422d-936f-0f971516ad76",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Mensaje: {{ $json.body.data.message.conversation }}\nNombre del usuario: {{ $json.body.data.pushName }}",
+        "options": {
+          "systemMessage": "Eres un asistente de atención al cliente especializado en responder preguntas frecuentes (FAQ) a través de WhatsApp para Softec. \n\nTu Tono: Debes usar un tono agradable, cortés, empático y profesional en todas las respuestas. \n\nTu Contexto (Información Esencial del Negocio): \n1. Productos/Servicios Principales: Somos desarrolladores de software web fullstack con soporte 24/7 y planes flexibles.\n2. Horario de Atención Humana: \"Lunes a Viernes de 9:00 a 18:00 (America/Mexico_City, UTC-6).\n3. Contacto Humano: Si el cliente tiene un problema complejo, proporciona esta vía: \"Puedes escribirnos al correo soporte@tunegocio.com\" \n\nTus Reglas de Respuesta: \nA. Sé conciso y ve al grano, dado que es un chat de WhatsApp. \nB. Tu respuesta debe basarse estrictamente en este contexto y en la conversación previa (memoria). No inventes ni \"alucines\" información. \nC. Si la pregunta requiere intervención humana o está fuera del contexto de tus FAQ, indica amablemente al cliente que un agente lo contactará en el horario de atención y proporciona la vía de contacto humano. \nD. Finaliza siempre ofreciendo ayuda adicional si lo necesita."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "41c7ed51-39e5-4462-81c1-e0eb2df1ee91",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        288,
+        208
+      ],
+      "id": "2fd50463-ce82-4c68-b054-74683788be28",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "d8WNmkTDxRd5jugV",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Edit Fields').item.json.body.data.key.remoteJid }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        432,
+        208
+      ],
+      "id": "fb63c97d-6f46-4537-87d1-bcdb1cf17765",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ff551447-995c-4f9a-a371-3d98dc367271",
+              "name": "message",
+              "value": "={{ JSON.stringify($json.output) }}",
+              "type": "string"
+            },
+            {
+              "id": "4483afdd-ba15-4e79-93ed-54dac43cddb9",
+              "name": "number",
+              "value": "={{ $('Edit Fields').item.json.body.data.key.remoteJid }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        768,
+        0
+      ],
+      "id": "1e07589d-d464-4ccd-8a27-7906a2038451",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://chess-noble-blanket-evaluation.trycloudflare.com/message/sendText/ivanTest",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"number\": \"{{ $json.number }}\",\n  \"text\": {{ $json.message }}\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        976,
+        0
+      ],
+      "id": "f44bdb00-a2cb-489d-b266-80c88a151943",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "auD07dsVh5531i2h",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "noData",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1184,
+        0
+      ],
+      "id": "ba7947ce-3e2f-4dfd-afd9-014d1af6cdd6",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "76dc52b7-76e2-4547-9ea9-14cad42683ab",
+  "meta": {
+    "instanceId": "87eb47d621bc3b9a70ffd004d9515b1726e88e18e13b8e8c70c73487d96d3d6d"
+  },
+  "id": "v73y0igM2RGPYxGD",
+  "tags": []
+}
